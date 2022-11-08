@@ -9,6 +9,8 @@ import re
 import os
 
 #obtain url & file name from user 
+#only HTTPS: urls are accepted at this time. 
+#https://www.exampleurl.com
 url = input("Please input url: ")
 file_name = input("Please Enter File Name: ")
 if url.startswith("https:"):
