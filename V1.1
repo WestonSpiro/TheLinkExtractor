@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+#The_Link_Extractor by Weston Spiro
+#beautiful soup link scraper
+#import necessary modules
+import time
+import requests
+from bs4 import BeautifulSoup
+import re
+import os
+#obtain url & file name from user
+#only HTTPS: urls are accepted at this time.
+#https://www.exampleurl.com
+print("Welcome to The_Link_Extractor!")
+print("Press Ctrl + C to quit program.")
+while True:
+    url = input("Please input url: ")
+    file_name = input("Please Enter File Name: ")
+    if url.startswith("https:"):
+        print("Requesting Connection")
+        time.sleep(1.5)
+    else:
+        print("Invalid url\nPlease Try Again")
+#get url from requests to pass to beautiful soup
+    page = requests.get(url)
+    if page.status_code == 200:
+        print("Connection Successful!")
+        time.sleep(1.5)
+    else:
+        print("Unable To Establish Connection\nPlease Try Again Later.")
+#create text file
+    page_text = page.text
+    print("Creating Text File")
+    file = open(file_name, 'w')
+    file.write("The_Link_Extractor")
+    file.write("\n")
+    file.write(file_name)
+    file.write("\n")
+    file.write(url)
+    file.close()
+    time.sleep(1.5)
+#pass url to beautiful soup and extract links
+    soup = BeautifulSoup(page_text, 'html.parser')
+    soup.prettify()
+    print("Preparing Link List")
+    time.sleep(1.5)
+    str_soup = str(soup)
+    https_links = re.findall(r"https://\S+/", str_soup)
+    https_link_list = []
+    for i in https_links:
+        if i not in https_link_list:
+            https_link_list.append(i)
+    for link in https_link_list:
+        file = open(file_name, 'a')
+        file.write("\n")
+        file.write(str(link))
+        file.close()
+        time.sleep(.15)
+    print(file_name + " Created!")
+    file = open(file_name, 'a')
+    file.write("\n")
+    file.close()
