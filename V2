@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+# The_Link_Extractor_V2
+# Weston Spiro 2023
+import tkinter as tk
+import tkinter.simpledialog
+import requests
+from bs4 import BeautifulSoup
+
+class App:
+    def __init__(self, master):
+        self.master = master
+        master.title("The_Link_Extractor")
+
+        self.url_label = tk.Label(master, text="Enter a URL:")
+        self.url_label.pack()
+
+        self.url_entry = tk.Entry(master)
+        self.url_entry.pack()
+
+        self.filename_label = tk.Label(master, text="Enter a filename to save the links to:")
+        self.filename_label.pack()
+
+        self.filename_entry = tk.Entry(master)
+        self.filename_entry.pack()
+
+        self.submit_button = tk.Button(master, text="Extract Links", command=self.extract_links)
+        self.submit_button.pack()
+
+        self.quit_button = tk.Button(master, text="Quit", command=master.destroy)
+        self.quit_button.pack()
+
+        self.bot_label = tk.Label(master, text="Weston Spiro 2023")
+        self.bot_label.pack()
+
+    def extract_links(self):
+        # Get the URL and filename from the user input
+        url = self.url_entry.get()
+        filename = self.filename_entry.get()
+
+        # Send HTTP request to the URL
+        response = requests.get(url)
+
+        # Parse the HTML content of the response with BeautifulSoup
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        # Find all anchor tags (links) in the HTML content
+        links = soup.find_all('a')
+
+        # Open the file for writing
+        with open(filename, "w") as file:
+            # Write each link found to the file
+            for link in links:
+                file.write(link.get('href') + "\n")
+
+        # Show a message box to let the user know that the links have been saved
+        try:
+            tk.messagebox.showinfo("Links Saved", f"The links have \nbeen saved to \n{filename}.")
+        except AttributeError:
+            tk.Tk().withdraw()
+            tkinter.simpledialog.messagebox.showinfo("Links Saved", f"The links have been saved to {filename}.")
+
+root = tk.Tk()
+app = App(root)
+root.mainloop()
