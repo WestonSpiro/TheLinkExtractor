@@ -14,6 +14,8 @@ https://www.exampleurl.com (Do not click on this link - it is for display purpos
 
 TheLinkExtractor prints the results to the terminal and creates a text file with the results
 
-Weston Spiro 2022
+V2 introduces a GUI for easy link extracting.
+
+Weston Spiro 2022/2023
 
 All Rights Reserved
